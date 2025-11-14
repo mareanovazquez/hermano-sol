@@ -1,0 +1,251 @@
+/* ===== MODAL VIDEO VERTICAL ===== */
+.modal-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+       background: rgba(38, 38, 38, 0.75);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: modalFadeIn 0.3s ease;
+}
+
+.modal-video-content {
+    position: relative;
+    width: 90%;
+    height: 98vh;
+    max-width: 450px;
+    aspect-ratio: 9 / 16;
+    
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+   
+    animation: modalSlideIn 0.4s ease;
+}
+
+.modal-video-player {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    cursor: pointer;
+    position: relative; /* 👈 IMPORTANTE */
+    z-index: 1; /* 👈 Debajo de los controles */
+}
+
+/* Botón cerrar - CORREGIDO */
+.modal-video-close {
+    position: fixed; /* 👈 CAMBIAR de absolute a fixed */
+    top: 20px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    z-index: 10003; /* El más alto de todos */
+    pointer-events: all; /* 👈 AGREGAR esto */
+}
+
+.modal-video-close:hover {
+    background: var(--color-action-orange);
+    transform: scale(1.1);
+}
+
+.modal-video-close i {
+    color: var(--color-main-black);
+    font-size: 1.25rem;
+    pointer-events: none; /* 👈 AGREGAR: El icono no debe interceptar clicks */
+}
+
+.modal-video-close:hover i {
+    color: var(--color-white-cold);
+}
+
+/* ===== CONTROLES PERSONALIZADOS ===== */
+.modal-video-controls {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: var(--spacing-md);
+    z-index: 10002; /* 👈 Por encima del video */
+    pointer-events: all; /* 👈 CRÍTICO: Permitir clicks */
+}
+
+.modal-video-control-btn {
+    width: 55px;
+    height: 55px;
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--color-main-black);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-size: 1.25rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    pointer-events: all; /* 👈 CRÍTICO: Permitir clicks */
+}
+
+.modal-video-control-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.modal-video-control-btn:active {
+    transform: scale(0.95);
+}
+
+/* Botón Play/Pause */
+.play-pause-btn {
+    background: var(--color-action-orange);
+    color: var(--color-white-cold);
+}
+
+.play-pause-btn:hover {
+    background: var(--color-orange-hover);
+}
+
+.play-pause-btn.paused {
+    background: var(--color-natural-teal);
+}
+
+.play-pause-btn.paused:hover {
+    background: var(--color-midnight-green);
+}
+
+/* Botón Mute/Unmute */
+.mute-btn {
+    animation: pulseAudio 2s infinite;
+}
+
+.mute-btn:hover {
+    background: var(--color-energy-yellow);
+    animation: none;
+}
+
+.mute-btn.active {
+    background: var(--color-natural-teal);
+    color: var(--color-white-cold);
+    animation: none;
+}
+
+.mute-btn.active:hover {
+    background: var(--color-midnight-green);
+}
+
+/* Animación pulse para el botón de audio */
+@keyframes pulseAudio {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(255, 159, 28, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 0 10px rgba(255, 159, 28, 0);
+    }
+}
+
+/* ===== SECCIÓN DEL BOTÓN DE VIDEO ===== */
+.section-video {
+    padding: var(--spacing-2xl) 0;
+}
+
+.video-cta {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+    
+}
+
+.video-cta h2 {
+    font-size: var(--font-size-2xl);
+    color: var(--color-main-black);
+    margin-bottom: var(--spacing-sm);
+}
+
+.video-cta p {
+    font-size: var(--font-size-lg);
+    color: var(--color-medium-gray);
+    margin-bottom: var(--spacing-xl);
+}
+
+.video-cta .btn i {
+    margin-right: var(--spacing-xs);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 768px) {
+    .modal-video-content {
+        max-width: 500px;
+    }
+    
+    .video-cta h2 {
+        font-size: var(--font-size-3xl);
+    }
+    
+    .modal-video-control-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 767px) {
+    .modal-video-content {
+        width: 95%;
+        max-width: none;
+        height: 85vh;
+        max-height: 85vh;
+    }
+    
+    .modal-video-close {
+        top: 10px;
+        right: 10px;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .modal-video-controls {
+        bottom: 20px;
+        gap: var(--spacing-sm);
+    }
+    
+    .modal-video-control-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 1.1rem;
+    }
+}
+
+/* Animaciones de entrada del modal */
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes modalSlideIn {
+    from {
+        transform: scale(0.8) translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}

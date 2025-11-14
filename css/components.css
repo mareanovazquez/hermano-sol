@@ -1,0 +1,256 @@
+/* === ESTILOS BASE === */
+body {
+    font-family: var(--font-sans);
+    background-color: var(--color-white-cold);
+    color: var(--color-medium-gray);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-loose);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* === UTILIDADES DE TIPOGRAFÍA === */
+.font-serif {
+    font-family: var(--font-serif);
+}
+
+.font-sans {
+    font-family: var(--font-sans);
+}
+
+/* === UTILIDADES DE COLOR === */
+.text-primary {
+    color: var(--color-main-black);
+}
+
+.text-secondary {
+    color: var(--color-medium-gray);
+}
+
+
+.text-action-orange {
+    color: var(--color-action-orange);
+}
+
+.text-natural-green {
+    color: var(--color-natural-green);
+}
+
+.text-white {
+    color: var(--color-soft-white);
+}
+
+
+.bg-action-orange {
+    background-color: var(--color-action-orange);
+}
+
+.bg-natural-green {
+    background-color: var(--color-natural-green);
+}
+
+.bg-soft-white {
+    background-color: var(--color-soft-white);
+}
+
+/* === UTILIDADES DE BORDE === */
+.border-subtle {
+    border: var(--border-width) solid var(--border-color-neutral);
+}
+
+.border-separator {
+    border: var(--border-width) solid var(--border-color-separator);
+}
+
+.rounded-sm {
+    border-radius: var(--border-radius-sm);
+}
+
+.rounded-md {
+    border-radius: var(--border-radius-md);
+}
+
+/* === UTILIDADES DE SOMBRA === */
+.shadow-subtle {
+    box-shadow: var(--shadow-subtle);
+}
+
+.shadow-medium {
+    box-shadow: var(--shadow-medium);
+}
+
+.shadow-elevated {
+    box-shadow: var(--shadow-elevated);
+}
+
+/* === COMPONENTES BASE === */
+
+/* Botones */
+.btn {
+    font-family: var(--font-sans);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-base);
+    border-radius: var(--border-radius-sm);
+    transition: all var(--transition-normal);
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.625rem 1.5rem;
+    /* 10px 24px */
+}
+
+.btn-primary {
+    background-color: var(--color-action-orange);
+    color: var(--color-white-cold);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-orange-hover);
+    box-shadow: var(--shadow-medium);
+    color: var(--color-white-pearl  );
+    }
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--color-action-orange);
+    border: var(--border-width) solid var(--border-color-neutral);
+}
+
+.btn-secondary:hover {
+    border-color: var(--color-natural-green);
+    color: var(--color-natural-green);
+}
+
+
+/* Cards */
+.card {
+    background-color: var(--color-white-pearl);
+    border-bottom: var(--border-width-xl) solid var(--border-color-hover);
+        border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow-subtle);
+    transition: box-shadow var(--transition-normal);
+}
+
+.card:hover {
+    box-shadow: var(--shadow-medium);
+}
+
+/* Enlaces */
+a {
+    color: var(--color-action-orange);
+    text-decoration: none;
+    transition: color var(--transition-normal);
+}
+
+a:hover {
+    color: var(--color-orange-hover);
+}
+
+a.link-secondary {
+    color: var(--color-natural-green);
+}
+
+a.link-secondary:hover {
+    color: var(--color-natural-green);
+    opacity: 0.8;
+}
+
+/* Headings con Lora */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-serif);
+    color: var(--color-main-black);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-tight);
+}
+
+h1 {
+    font-size: var(--font-size-5xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+}
+
+h2 {
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-snug);
+}
+
+h3 {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-normal);
+}
+
+/* Párrafos */
+p {
+    font-family: var(--font-sans);
+    font-weight: var(--font-weight-normal);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-loose);
+    color: var(--color-medium-gray);
+}
+
+/* Texto destacado */
+.text-highlight {
+    font-family: var(--font-sans);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-main-black);
+}
+
+/* Logo/Branding */
+.logo {
+    font-family: var(--font-serif);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-3xl);
+    color: var(--color-main-black);
+}
+
+/* CTA Text */
+.cta-text {
+    font-family: var(--font-sans);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-lg);
+    color: var(--color-action-orange);
+}
+
+/* Navegación */
+.nav-link {
+    font-family: var(--font-sans);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-sm);
+    color: var(--color-medium-gray);
+    transition: color var(--transition-normal);
+}
+
+.nav-link:hover {
+    color: var(--color-action-orange);
+}
+
+/* Testimonios/Citas */
+blockquote {
+    font-family: var(--font-serif);
+    font-weight: var(--font-weight-normal);
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-relaxed);
+    font-style: italic;
+    color: var(--color-main-black);
+}
+
+/* Información institucional */
+.institutional-text {
+    font-family: var(--font-sans);
+    font-weight: var(--font-weight-normal);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-extra-loose);
+    color: var(--color-medium-gray);
+}
+
