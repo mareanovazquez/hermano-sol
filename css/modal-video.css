@@ -20,10 +20,8 @@
     height: 98vh;
     max-width: 450px;
     aspect-ratio: 9 / 16;
-    
     border-radius: var(--border-radius-md);
     overflow: hidden;
-   
     animation: modalSlideIn 0.4s ease;
 }
 
@@ -74,7 +72,7 @@
 /* ===== CONTROLES PERSONALIZADOS ===== */
 .modal-video-controls {
     position: absolute;
-    bottom: 30px;
+    bottom: 15px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -84,8 +82,8 @@
 }
 
 .modal-video-control-btn {
-    width: 55px;
-    height: 55px;
+    width: 40px;
+    height: 40px;
     background: rgba(255, 255, 255, 0.95);
     color: var(--color-main-black);
     border: none;
@@ -95,13 +93,13 @@
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
-    font-size: 1.25rem;
+    font-size: 1rem;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     pointer-events: all; /* 👈 CRÍTICO: Permitir clicks */
 }
 
 .modal-video-control-btn:hover {
-    transform: scale(1.1);
+    transform: scale(0.95);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
@@ -196,9 +194,9 @@
     }
     
     .modal-video-control-btn {
-        width: 60px;
-        height: 60px;
-        font-size: 1.4rem;
+        width: 45px;
+        height: 45px;
+        font-size: 1rem;
     }
 }
 
