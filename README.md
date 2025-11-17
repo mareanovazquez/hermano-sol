@@ -1,32 +1,33 @@
 # Jardín Modelo Hermano Sol
 
-Sitio web oficial del Jardín Modelo Hermano Sol, una institución educativa con 40 años de experiencia en educación inicial, ubicada en Villa Santa Rita, Buenos Aires.
+Sitio web del Jardín Modelo Hermano Sol, institución educativa con 40 años de trayectoria en educación inicial, ubicada en Villa Santa Rita, Buenos Aires.
 
-## Descripción del Proyecto
+## Descripción
 
-Este proyecto es un sitio web responsive para el Jardín Modelo Hermano Sol, diseñado para mostrar la propuesta pedagógica, instalaciones, actividades y facilitar el contacto con las familias interesadas.
+Proyecto front-end estático y responsive que presenta la propuesta pedagógica del jardín, sus espacios, actividades, galería multimedia y vías de contacto. Incluye interacciones accesibles y animaciones suaves para mejorar la experiencia del usuario.
 
-## Características Principales
+## Funcionalidades
 
-- **Diseño Responsive**: Adaptable a dispositivos móviles, tablets y escritorio
-- **Navegación Intuitiva**: Menú de navegación claro y accesible
-- **Secciones Informativas**: Presentación de salas, espacios, propuesta pedagógica y actividades
-- **Preguntas Frecuentes (FAQ)**: Página dedicada con acordeón interactivo
-- **Formulario de Contacto**: Para consultas e inscripciones, con mensajes tipo toast
-- **Galería de Imágenes**: Con visualización modal para mostrar los espacios del jardín
-- **Animaciones de Scroll**: Mejoran la experiencia durante el recorrido del sitio
-- **Mapa de Ubicación en Modal**: Apertura de mapa en ventana modal (Google Maps)
-- **Botón Volver Arriba**: Acceso rápido al inicio de la página
+- Navegación principal y menú móvil
+- Secciones: Hero, Salas, Espacios, Propuesta pedagógica, Actividades, Contacto
+- Modal de imágenes y galerías
+- Modal de video
+- Mapa (modal de ubicación)
+- Animaciones al hacer scroll (optimizadas con IntersectionObserver)
+- Botón “volver arriba”
+- Formulario de contacto con doble envío:
+  - Firebase Firestore v8 (colección `mensajes`)
+  - Formspree (endpoint `f/meopyqpk`)
+- Mensajes de estado (toast) para feedback del usuario
+- Optimización visual con imágenes `.webp` y recursos estáticos modularizados
 
-## Tecnologías Utilizadas
+## Páginas
 
-- HTML5
-- CSS3 (con arquitectura modular)
-- JavaScript Vanilla
-- Font Awesome (para iconografía)
-- Google Fonts
+- `index.html`: Página principal del sitio
+- `pages/galeria.html`: Galería de imágenes del jardín
+- `pages/preguntas-frecuentes.html`: Sección de FAQ con acordeón
 
-## Estructura del Proyecto
+## Estructura
 
 ```
 jardin-hermano-sol/
