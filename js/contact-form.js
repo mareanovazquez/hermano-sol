@@ -1,4 +1,4 @@
-// contact-form.js - Jardín Hermano Sol - Versión mejorada UX
+// contact-form.js - Jardín Hermano Sol - Firebase only
 
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('contact-form');
@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', function (e) {
         e.preventDefault();
 
+        // Obtener valores del formulario
         const nombre = document.getElementById('nombre').value;
         const apellido = document.getElementById('apellido').value;
         const email = document.getElementById('email').value;
@@ -13,12 +14,25 @@ document.addEventListener('DOMContentLoaded', function () {
         const interes = document.getElementById('interes').value;
         const mensaje = document.getElementById('mensaje').value;
 
-        // Crear objeto con datos - teléfono puede estar vacío
+        // Validación de campos obligatorios
+        if (!nombre || !apellido || !email || !interes || !mensaje) {
+            showToast("Por favor, completa todos los campos obligatorios.", "error", 3000);
+            return;
+        }
+
+        // Validar formato de email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            showToast("Por favor, ingresa un email válido.", "error", 3000);
+            return;
+        }
+
+        // Preparar datos para enviar
         const formData = {
             name: nombre.trim(),
             lastName: apellido.trim(),
             email: email.trim().toLowerCase(),
-            phone: telefono.trim() || '', // Permitir cadena vacía
+            phone: telefono.trim() || '', // Teléfono opcional
             classroom: interes,
             mensaje: mensaje.trim(),
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -26,60 +40,16 @@ document.addEventListener('DOMContentLoaded', function () {
             statusMessage: "nuevo"
         };
 
-        // Función para enviar a Firebase
-        function sendToFirebase() {
-            return db.collection("mensajes").add(formData);
-        }
-
-        // Función para enviar a Formspree
-        function sendToFormspree() {
-            const formspreeUrl = 'https://formspree.io/f/meopyqpk';
-
-            const formspreeData = new FormData();
-            formspreeData.append('Nombre', nombre);
-            formspreeData.append('Apellido', apellido);
-            formspreeData.append('Email', email);
-            if (telefono.trim()) { // Solo agregar si hay teléfono
-                formspreeData.append('Telefono', telefono);
-            }
-            formspreeData.append('Sala de interés', interes);
-            formspreeData.append('Mensaje', mensaje);
-            formspreeData.append('_subject', `Mensaje de ${nombre} ${apellido} - ${interes}`);
-
-            return fetch(formspreeUrl, {
-                method: 'POST',
-                body: formspreeData,
-                headers: {
-                    'Accept': 'application/json'
-                }
-            });
-        }
-
-        // Validación simplificada - solo campos obligatorios
-        if (!nombre || !apellido || !email || !interes || !mensaje) {
-            showToast("Por favor, completa todos los campos obligatorios.", "error", 3000);
-            return;
-        }
-
-        // Solo validar email
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            showToast("Por favor, ingresa un email válido.", "error", 3000);
-            return;
-        }
-
+        // Deshabilitar botón mientras se envía
         const submitButton = document.getElementById('submit-button__contact');
-        const originalButtonText = submitButton.textContent; // Capturar texto original
+        const originalButtonText = submitButton.textContent;
         submitButton.disabled = true;
-        submitButton.textContent = 'Enviando...'; // Cambiar texto de forma segura
+        submitButton.textContent = 'Enviando...';
 
-        function resetButton() {
-            submitButton.disabled = false;
-            submitButton.textContent = originalButtonText; // Restaurar texto original
-        }
-
-        Promise.all([sendToFirebase(), sendToFormspree()])
-            .then(function (results) {
+        // Enviar a Firebase
+        db.collection("mensajes").add(formData)
+            .then(function () {
+                // Éxito
                 showToast(
                     '¡Gracias por tu mensaje! <br><br>' +
                     'Nos pondremos en contacto muy pronto.<br><br>',
@@ -87,56 +57,21 @@ document.addEventListener('DOMContentLoaded', function () {
                     5000
                 );
                 form.reset();
-                resetButton();
             })
             .catch(function (error) {
-                console.error('Error:', error);
-
-                sendToFirebase()
-                    .then(function () {
-                        showToast(
-                            '¡Gracias por tu mensaje! <br><br>' +
-                            'Nos pondremos en contacto muy pronto.<br><br>',
-                            'success',
-                            5000
-                        );
-                        form.reset();
-                        resetButton();
-                    })
-                    .catch(function (firebaseError) {
-                        console.error('Firebase error:', firebaseError);
-
-                        sendToFormspree()
-                            .then(function (response) {
-                                if (response.ok) {
-                                    showToast(
-                                        '¡Gracias por tu mensaje! <br><br>' +
-                                        'Nos pondremos en contacto muy pronto.<br><br>',
-                                        'success',
-                                        5000
-                                    );
-                                    form.reset();
-                                } else {
-                                    showToast(
-                                        'Hubo un problema al enviar tu mensaje. 😔<br><br>' +
-                                        'Por favor intenta nuevamente en unos minutos, o contáctanos directamente por WhatsApp.<br><br>',
-                                        'error',
-                                        5000
-                                    );
-                                }
-                                resetButton();
-                            })
-                            .catch(function (formspreeError) {
-                                console.error('Formspree error:', formspreeError);
-                                showToast(
-                                    'Hubo un problema al enviar tu mensaje. 😔<br><br>' +
-                                    'Por favor intenta nuevamente en unos minutos, o contáctanos directamente por WhatsApp.<br><br>',
-                                    'error',
-                                    5000
-                                );
-                                resetButton();
-                            });
-                    });
+                // Error
+                console.error('Error al enviar mensaje:', error);
+                showToast(
+                    'Hubo un problema al enviar tu mensaje. 😔<br><br>' +
+                    'Por favor intenta nuevamente en unos minutos, o contáctanos directamente por WhatsApp.<br><br>',
+                    'error',
+                    5000
+                );
+            })
+            .finally(function () {
+                // Restaurar botón en cualquier caso
+                submitButton.disabled = false;
+                submitButton.textContent = originalButtonText;
             });
     });
 });
