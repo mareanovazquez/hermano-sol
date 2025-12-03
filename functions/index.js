@@ -8,40 +8,44 @@ require('dotenv').config();
 admin.initializeApp();
 
 exports.sendContactEmail = functions.firestore
-    .document('mensajes/{mensajeId}')
-    .onCreate(async (snap, context) => {
-        const contactData = snap.data();
-        const { name, lastName, email, phone, classroom, mensaje, createdAt } = contactData;
+  .document('mensajes/{mensajeId}')
+  .onCreate(async (snap, context) => {
+    const contactData = snap.data();
+    const { name, lastName, email, phone, classroom, mensaje, createdAt } = contactData;
 
-        const emailUser = process.env.EMAIL_USER;
-        const emailPass = process.env.EMAIL_PASS;
+    const emailUser = process.env.EMAIL_USER;
+    const emailPass = process.env.EMAIL_PASS;
 
-        console.log('📧 Iniciando envío de email para:', name, lastName);
+    console.log('📧 Iniciando envío de email para:', name, lastName);
 
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: emailUser,
-                pass: emailPass
-            }
-        });
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: emailUser,
+        pass: emailPass
+      }
+    });
 
-        // Formatear la fecha
-        const fecha = createdAt ? new Date(createdAt.toDate()).toLocaleString('es-AR', {
-            dateStyle: 'full',
-            timeStyle: 'short'
-        }) : 'Fecha no disponible';
+    // Formatear la fecha
+    const fecha = createdAt ? new Date(createdAt.toDate()).toLocaleString('es-AR', {
+      dateStyle: 'full',
+      timeStyle: 'short'
+    }) : 'Fecha no disponible';
 
-        const mailOptions = {
-            from: `Jardín Hermano Sol <${emailUser}>`,
-            to: 'infohermanosol@gmail.com', // ← CAMBIAR por el email donde querés recibir los mensajes
-            subject: `📩 Nueva consulta de ${name} ${lastName} - ${classroom}`,
-            html: `
+    const mailOptions = {
+      from: `Jardín Hermano Sol <${emailUser}>`,
+      to: 'infohermanosol@gmail.com', // ← CAMBIAR por el email donde querés recibir los mensajes
+      subject: `📩 Nueva consulta de ${name} ${lastName} - ${classroom}`,
+      html: `
         <!DOCTYPE html>
         <html lang="es">
         <head>
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Inter:wght@400;500;600&family=Literata:wght@400;600&display=swap" rel="stylesheet">
           <style>
             body {
               font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -52,7 +56,7 @@ exports.sendContactEmail = functions.firestore
             .container {
               max-width: 600px;
               margin: 0 auto;
-              background-color: #FFFFFF;
+              background-color: #FCFCF7;
             }
             .header {
               background: linear-gradient(135deg, #FF9F1C 0%, #fcdd44 100%);
@@ -134,6 +138,7 @@ exports.sendContactEmail = functions.firestore
               margin: 0;
               white-space: pre-wrap;
               word-wrap: break-word;
+              font-size: 16px;
             }
             .action-button {
               text-align: center;
@@ -142,7 +147,7 @@ exports.sendContactEmail = functions.firestore
             .btn {
               display: inline-block;
               background-color: #E87A30;
-              color: #FFFFFF;
+              color: #FCFCF7;
               padding: 14px 28px;
               text-decoration: none;
               border-radius: 2px;
@@ -152,6 +157,7 @@ exports.sendContactEmail = functions.firestore
             }
             .btn:hover {
               background-color: #CF6017;
+              color: #FCFCF7;
             }
             .footer {
               background-color: #011936;
@@ -171,16 +177,7 @@ exports.sendContactEmail = functions.firestore
               margin: 4px 0;
               opacity: 0.8;
             }
-            .badge {
-              display: inline-block;
-              background-color: #177e89;
-              color: #FFFFFF;
-              padding: 6px 12px;
-              border-radius: 2px;
-              font-size: 12px;
-              font-weight: 600;
-              margin-bottom: 8px;
-            }
+            
           </style>
         </head>
         <body>
@@ -194,9 +191,7 @@ exports.sendContactEmail = functions.firestore
             <!-- Content -->
             <div class="content">
               <h2 class="section-title">Datos del contacto</h2>
-              
-              <div class="badge">CONSULTA NUEVA</div>
-              
+                            
               <div class="info-box">
                 <div class="info-row">
                   <div class="info-label">👤 Nombre completo:</div>
@@ -233,7 +228,7 @@ exports.sendContactEmail = functions.firestore
               <h2 class="section-title">Mensaje</h2>
               
               <div class="message-box">
-                <h3 class="message-title">Consulta:</h3>
+                <h3 class="message-title">MENSAJE:</h3>
                 <p class="message-text">${mensaje}</p>
               </div>
               
@@ -266,29 +261,29 @@ exports.sendContactEmail = functions.firestore
         </body>
         </html>
       `
-        };
+    };
 
-        try {
-            await transporter.sendMail(mailOptions);
-            console.log('✅ Email enviado exitosamente a:', mailOptions.to);
+    try {
+      await transporter.sendMail(mailOptions);
+      console.log('✅ Email enviado exitosamente a:', mailOptions.to);
 
-            // Actualizar el documento en Firestore
-            await snap.ref.update({
-                emailSent: true,
-                emailSentAt: admin.firestore.FieldValue.serverTimestamp()
-            });
+      // Actualizar el documento en Firestore
+      await snap.ref.update({
+        emailSent: true,
+        emailSentAt: admin.firestore.FieldValue.serverTimestamp()
+      });
 
-            return { success: true };
-        } catch (error) {
-            console.error('❌ Error al enviar email:', error);
+      return { success: true };
+    } catch (error) {
+      console.error('❌ Error al enviar email:', error);
 
-            // Guardar el error en Firestore
-            await snap.ref.update({
-                emailError: error.message,
-                emailSent: false,
-                emailErrorAt: admin.firestore.FieldValue.serverTimestamp()
-            });
+      // Guardar el error en Firestore
+      await snap.ref.update({
+        emailError: error.message,
+        emailSent: false,
+        emailErrorAt: admin.firestore.FieldValue.serverTimestamp()
+      });
 
-            throw error;
-        }
-    });
+      throw error;
+    }
+  });
