@@ -107,68 +107,53 @@ ${mensaje}
             submitButton.textContent = originalButtonText;
         }
 
-        // Envío dual: Firebase + Formspree
-        Promise.all([sendToFirebase(), sendToFormspree()])
+        Promise.allSettled([sendToFirebase(), sendToFormspree()])
             .then(function (results) {
-                showToast(
-                    '¡Gracias por tu mensaje! <br><br>' +
-                    'Nos pondremos en contacto muy pronto.<br><br>',
-                    'success',
-                    5000
-                );
-                form.reset();
+                const firebaseResult = results[0];
+                const formspreeResult = results[1];
+
+                const firebaseSuccess = firebaseResult.status === 'fulfilled';
+                const formspreeSuccess =
+                    formspreeResult.status === 'fulfilled' &&
+                    formspreeResult.value?.ok;
+
+                // Primero manejar el resultado del usuario
+                if (firebaseSuccess || formspreeSuccess) {
+                    showToast(
+                        '¡Gracias por tu mensaje! <br><br>' +
+                        'Nos pondremos en contacto muy pronto.<br><br>',
+                        'success',
+                        5000
+                    );
+                    form.reset();
+                } else {
+                    showToast(
+                        'Hubo un problema al enviar tu mensaje. 😔<br><br>' +
+                        'Por favor intentá nuevamente en unos minutos, o contáctanos directamente por WhatsApp.<br><br>',
+                        'error',
+                        5000
+                    );
+                    console.error(
+                        'Error enviando el formulario a ambos servicios. - FIREBASE: ' +
+                        firebaseResult.reason +
+                        ', FORMSPREE: ' +
+                        (formspreeResult.reason || formspreeResult.value?.status)
+                    );
+                }
+
+                // Después logs detallados para debugging
+                if (!firebaseSuccess) {
+                    console.error('Firebase error:', firebaseResult.reason);
+                }
+                if (!formspreeSuccess) {
+                    if (formspreeResult.status === 'rejected') {
+                        console.error('Formspree error:', formspreeResult.reason);
+                    } else {
+                        console.error('Formspree HTTP error:', formspreeResult.value?.status);
+                    }
+                }
+
                 resetButton();
-            })
-            .catch(function (error) {
-                console.error('Error:', error);
-
-                // Fallback: intentar solo Firebase
-                sendToFirebase()
-                    .then(function () {
-                        showToast(
-                            '¡Gracias por tu mensaje! <br><br>' +
-                            'Nos pondremos en contacto muy pronto.<br><br>',
-                            'success',
-                            5000
-                        );
-                        form.reset();
-                        resetButton();
-                    })
-                    .catch(function (firebaseError) {
-                        console.error('Firebase error:', firebaseError);
-
-                        // Último intento: solo Formspree
-                        sendToFormspree()
-                            .then(function (response) {
-                                if (response.ok) {
-                                    showToast(
-                                        '¡Gracias por tu mensaje! <br><br>' +
-                                        'Nos pondremos en contacto muy pronto.<br><br>',
-                                        'success',
-                                        5000
-                                    );
-                                    form.reset();
-                                } else {
-                                    showToast(
-                                        'Hubo un problema al enviar tu mensaje. 😔<br><br>' +
-                                        'Por favor intentá nuevamente en unos minutos, o contáctanos directamente por WhatsApp.<br><br>',
-                                        'error',
-                                        5000
-                                    );
-                                }
-                                resetButton();
-                            })
-                            .catch(function (formspreeError) {
-                                console.error('Formspree error:', formspreeError);
-                                showToast(
-                                    'Hubo un problema al enviar tu mensaje. 😔<br><br>' +
-                                    'Por favor intentá nuevamente en unos minutos, o contáctanos directamente por WhatsApp.<br><br>',
-                                    'error',
-                                    5000
-                                );
-                                resetButton();
-                            });
-                    });
             });
     });
 });
