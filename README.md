@@ -27,7 +27,6 @@ Proyecto front-end estático y responsive que presenta la propuesta pedagógica,
 ```
 jardin-hermano-sol/
 ├── README.md
-├── firebase.json                 # (presente) posible configuración para Firebase Hosting
 ├── index.html
 ├── pages/
 │   ├── galeria.html
@@ -42,7 +41,6 @@ jardin-hermano-sol/
 │   └── variables.css
 ├── js/
 │   ├── backToTop.js
-│   ├── config.js
 │   ├── contact-form.js
 │   ├── faq.js
 │   ├── header-animation.js
@@ -64,7 +62,6 @@ jardin-hermano-sol/
 
 - La carpeta `css/` contiene hojas de estilo modulares (componentes, FAQ, galerías y animaciones).
 - La carpeta `js/` agrupa los scripts de interacción: navegación móvil, modales, formularios y animaciones.
-- `firebase.json` está presente si quieres desplegar en Firebase Hosting (revisar configuración antes de `firebase deploy`).
 
 ## Cómo ver el sitio localmente
 
@@ -77,11 +74,6 @@ jardin-hermano-sol/
 ```
 
    - Con Live Server (VS Code): instalar la extensión Live Server y seleccionar "Open with Live Server".
-
-3. Si usás Firebase Hosting, revisá `firebase.json` y luego:
-```bash
-   firebase deploy --only hosting
-```
 
 ## Desarrollo y mantenimiento
 
