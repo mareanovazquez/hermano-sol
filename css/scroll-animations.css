@@ -229,9 +229,7 @@
     }
 
     /* Reducir intensidad de transformaciones en móviles */
-    .space-card,
-    .timeline-item
-    {
+    .space-card {
         transform: translateY(20px);
     }
 
@@ -263,5 +261,7 @@
     .contact-form-container.form-visible,
     .section__header.header-visible {
         transform: none;
+        transition: opacity 0.3s ease;
+        transition-delay: 0s;
     }
 }

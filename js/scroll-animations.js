@@ -21,6 +21,20 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        // Fallback para navegadores sin IntersectionObserver
+        if (!('IntersectionObserver' in window)) {
+            function handleScroll() {
+                elementsToAnimate.forEach(elemento => {
+                    if (isInViewport(elemento) && !elemento.classList.contains(config.visibleClass)) {
+                        elemento.classList.add(config.visibleClass);
+                    }
+                });
+            }
+            window.addEventListener('scroll', handleScroll);
+            handleScroll();
+            return;
+        }
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -38,40 +52,12 @@ document.addEventListener('DOMContentLoaded', function () {
             observer.observe(elemento);
         });
 
-        function checkInitiallyVisible() {
-            elementsToAnimate.forEach(elemento => {
-                if (isInViewport(elemento)) {
-                    elemento.classList.add(config.visibleClass);
-                    observer.unobserve(elemento);
-                }
-            });
-        }
-        checkInitiallyVisible();
-
-        // Fallback para navegadores sin IntersectionObserver
-        if (!('IntersectionObserver' in window)) {
-            observer.disconnect();
-
-            function handleScroll() {
-                elementsToAnimate.forEach(elemento => {
-                    if (isInViewport(elemento) && !elemento.classList.contains(config.visibleClass)) {
-                        elemento.classList.add(config.visibleClass);
-                    }
-                });
-            }
-            window.addEventListener('scroll', handleScroll);
-            handleScroll();
-        }
         return observer;
     }
     function isInViewport(elemento) {
         const rect = elemento.getBoundingClientRect();
-        return (
-            rect.top >= 0 &&
-            rect.left >= 0 &&
-            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-        );
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+        return rect.top < viewportHeight && rect.bottom > 0;
     }
 
     // =================================================================
