@@ -71,3 +71,6 @@ functions/.env
 
 # Videos (archivos grandes)
 videos/
+
+# Claude Code local settings
+.claude/settings.local.json

@@ -1,7 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(Remove-Item \"c:\\\\Users\\\\mdvazquez\\\\Documents\\\\hermano-sol\\\\js\\\\config.js\")"
-    ]
-  }
-}
